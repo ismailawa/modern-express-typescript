@@ -4,13 +4,15 @@ import path from 'path';
 import logger from './libs/logger';
 import MetadataKeys from './utils/metadata.keys';
 import { IRouter } from './decorators/routes/handlers.decorator';
+import { container } from 'tsyringe';
 
 class ExpressApplication {
   private app?: Application;
   constructor(
     private port: string | number,
     private middlewares: any[],
-    private controllers: any[]
+    private controllers: any[],
+    private dependencies: any[]
   ) {
     this.app = express();
     this.port = port;
@@ -41,7 +43,8 @@ class ExpressApplication {
     const info: Array<{ api: string; handler: string }> = [];
     controllers.forEach((controller) => {
       const controllerInstance: { [handlerName: string]: Handler } =
-        new controller();
+        container.resolve(controller);
+
       const basePath: string = Reflect.getMetadata(
         MetadataKeys.BASE_PATH,
         controller

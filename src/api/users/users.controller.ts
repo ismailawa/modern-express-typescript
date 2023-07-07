@@ -3,16 +3,21 @@ import {
   PUT,
   PATCH,
   DELETE,
+  GET,
 } from './../../decorators/routes/handlers.decorator';
 import Controller from '../../decorators/routes/controller.decorator';
 import { Request, Response } from 'express';
-import { GET } from '../../decorators/routes/handlers.decorator';
+import UsersService from './users.service';
+import { injectable, inject } from 'tsyringe';
+import IUsersService from './IUsers.service';
 
+@injectable()
 @Controller('/api/users')
 export default class UsersController {
+  constructor(@inject('IUsersService') private UsersService: IUsersService) {}
   @POST('')
   public async createUser(req: Request, res: Response): Promise<any> {
-    res.status(200).json({ name: 'working ' });
+    res.status(200).json({ data: await this.UsersService.create(req.body) });
   }
 
   @GET('')
