@@ -19,7 +19,7 @@ export default class UsersService implements IUsersService {
     return payload;
   }
 
-  public async delete(payload: any): Promise<any> {
+  public async delete(payload: Record<string, unknown>): Promise<any> {
     return payload;
   }
 }
